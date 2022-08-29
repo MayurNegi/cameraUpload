@@ -1,9 +1,30 @@
 import React from 'react';
 import { TouchableOpacity, StyleSheet, View } from 'react-native';
+import { Camera, TakePhotoOptions, TakeSnapshotOptions } from 'react-native-vision-camera';
 
-export const CaptureButton = () => {
+interface ICaptureButton {
+	cameraRef: React.RefObject<Camera>;
+	enabled: boolean
+}
+
+const photoOptions: TakePhotoOptions & TakeSnapshotOptions = {
+	enableAutoStabilization: true,
+}
+
+export const CaptureButton = ({cameraRef, enabled}: ICaptureButton) => {
+	const onPhotoCapture = async () => {
+		if(cameraRef.current !== null) {
+			const photo = await cameraRef.current.takePhoto(photoOptions)
+			console.log('photo', photo)
+		}
+	}
+
 	return (
-		<TouchableOpacity style={{flex: 1}}>
+		<TouchableOpacity
+			onPress={onPhotoCapture}
+			disabled={!enabled}
+			style={{flex: 1}}
+		>
 			<View style={styles.button} />
 		</TouchableOpacity>
 	)

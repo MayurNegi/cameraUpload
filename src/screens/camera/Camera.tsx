@@ -6,10 +6,17 @@ import { useIsFocused } from '@react-navigation/native';
 import { CaptureButton } from '../../components/CaptureButton';
 
 export const CameraScreen = () => {
+	const cameraRef = React.useRef<Camera>(null);
+	const [isCameraInitialized, setIsCameraInitialized] = React.useState(false);
+
 	const devices = useCameraDevices('wide-angle-camera');
 	const isFocused = useIsFocused();
 
 	const device = devices.back;
+
+	const onInitialized = () => {
+		setIsCameraInitialized(true);
+	}
 
 	React.useEffect(() => {
 		async function checkPermission() {
@@ -28,13 +35,15 @@ export const CameraScreen = () => {
 				<ActivityIndicator />
 			) : (
 				<Camera
+					ref={cameraRef}
 					style={StyleSheet.absoluteFill}
 					device={device}
 					isActive={isFocused}
 					photo={true}
+					onInitialized={onInitialized}
 				/>
 			)}
-			<CaptureButton />
+			<CaptureButton cameraRef={cameraRef} enabled={isCameraInitialized} />
 		</View>
   	)
 }
