@@ -8,9 +8,9 @@ import {
 const App = () => {
   return (
     <SafeAreaView>
-      	<StatusBar />
+    	<StatusBar />
 		<Text>Hii</Text>
-    </SafeAreaView>
+	</SafeAreaView>
   );
 };
 
