@@ -3,20 +3,14 @@ import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import { Camera, useCameraDevices } from 'react-native-vision-camera';
 import { useIsFocused } from '@react-navigation/native';
 
+import { getImagesList } from '../../lib/fs';
 import { CaptureButton } from '../../components/CaptureButton';
+import { LastImage } from '../../components/LastImage';
 
 export const CameraScreen = () => {
 	const cameraRef = React.useRef<Camera>(null);
 	const [isCameraInitialized, setIsCameraInitialized] = React.useState(false);
-
-	const devices = useCameraDevices('wide-angle-camera');
-	const isFocused = useIsFocused();
-
-	const device = devices.back;
-
-	const onInitialized = () => {
-		setIsCameraInitialized(true);
-	}
+	const [imageList, setImageList] = React.useState<string[]>([]);
 
 	React.useEffect(() => {
 		async function checkPermission() {
@@ -29,8 +23,33 @@ export const CameraScreen = () => {
 		checkPermission();
 	}, []);
 
+	React.useEffect(() => {
+		async function getImages() {
+			try {
+				const directoryItems = await getImagesList();
+				let imagePaths = directoryItems.map((element) => {
+					return element.path;
+				});
+				setImageList(imagePaths);
+			} catch(e) {}
+		}
+
+		getImages();
+	}, []);
+
+	console.log('imageList', imageList)
+
+	const devices = useCameraDevices();
+	const isFocused = useIsFocused();
+
+	const device = devices.back;
+
+	const onInitialized = () => {
+		setIsCameraInitialized(true);
+	}
+
 	return (
-		<View style={{flex: 1}}>
+		<View style={{flex: 1, position: 'relative'}}>
 			{device == null ? (
 				<ActivityIndicator />
 			) : (
@@ -43,7 +62,14 @@ export const CameraScreen = () => {
 					onInitialized={onInitialized}
 				/>
 			)}
-			<CaptureButton cameraRef={cameraRef} enabled={isCameraInitialized} />
+			<CaptureButton
+				cameraRef={cameraRef}
+				enabled={isCameraInitialized}
+				imageList={imageList}
+				setImageList={setImageList}
+			/>
+
+			<LastImage imageList={imageList} />
 		</View>
   	)
 }
