@@ -37,8 +37,6 @@ export const CameraScreen = () => {
 		getImages();
 	}, []);
 
-	console.log('imageList', imageList)
-
 	const devices = useCameraDevices();
 	const isFocused = useIsFocused();
 

@@ -8,7 +8,6 @@ interface ILastImage {
 
 export const LastImage = ({imageList}: ILastImage) => {
 	const image = imageList[imageList.length - 1];
-	console.log('image', image);
 
 	return (
 		<View style={styles.container}>

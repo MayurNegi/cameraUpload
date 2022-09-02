@@ -19,9 +19,7 @@ export const CaptureButton = ({cameraRef, enabled, imageList, setImageList}: ICa
 		if(cameraRef.current !== null) {
 			try {
 				const photo = await cameraRef.current.takePhoto(photoOptions);
-				console.log('photo', photo);
 				const result = await downloadImage(photo.path);
-				console.log('result', result);
 				setImageList((images: string[]) => [...images, result]);
 			} catch (e) {}
 		}
