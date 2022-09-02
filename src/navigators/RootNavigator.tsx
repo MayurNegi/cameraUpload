@@ -1,24 +1,24 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator, NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import {CameraScreen} from '../screens/camera';
 import {GalleryScreen} from '../screens/gallery';
 
-const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator<RootList>();
+
+export type RootList = {
+	Camera: undefined;
+	Gallery: undefined;
+}
 
 export const RootNavigator = () => {
   return (
     <NavigationContainer>
-    	<Tab.Navigator
-			screenOptions={() => ({
-				headerShown: false,
-				tabBarActiveTintColor: 'tomato',
-				tabBarInactiveTintColor: 'gray',
-			  })}>
-			<Tab.Screen name="Camera" component={CameraScreen} />
-			<Tab.Screen name="Gallery" component={GalleryScreen} />
-		</Tab.Navigator>
+		<Stack.Navigator screenOptions={{headerShown: false}}>
+			<Stack.Screen name="Camera" component={CameraScreen} />
+			<Stack.Screen name="Gallery" component={GalleryScreen} />
+		</Stack.Navigator>
     </NavigationContainer>
   );
 }

@@ -1,18 +1,18 @@
 import React from 'react';
-
-import { View, Image, StyleSheet } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity } from 'react-native';
 
 interface ILastImage {
 	imageList: string[];
+	navigateToGallery: () => void;
 }
 
-export const LastImage = ({imageList}: ILastImage) => {
+export const LastImage = ({imageList, navigateToGallery}: ILastImage) => {
 	const image = imageList[imageList.length - 1];
 
 	return (
-		<View style={styles.container}>
+		<TouchableOpacity onPress={navigateToGallery} style={styles.container}>
 			<Image style={styles.image} source={{uri: `file://${image}`}} />
-		</View>
+		</TouchableOpacity>
 	)
 }
 
