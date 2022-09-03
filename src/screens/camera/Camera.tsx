@@ -4,6 +4,7 @@ import { Camera, useCameraDevices } from 'react-native-vision-camera';
 import { useIsFocused } from '@react-navigation/native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
+import { ImageListContext } from '../../init';
 import { getImagesList } from '../../lib/fs';
 import { CaptureButton } from '../../components/CaptureButton';
 import { LastImage } from '../../components/LastImage';
@@ -14,32 +15,8 @@ export type CameraProps = NativeStackScreenProps<RootList, 'Camera'>;
 export const CameraScreen: React.FC<CameraProps> = ({navigation}: CameraProps) => {
 	const cameraRef = React.useRef<Camera>(null);
 	const [isCameraInitialized, setIsCameraInitialized] = React.useState(false);
-	const [imageList, setImageList] = React.useState<string[]>([]);
 
-	React.useEffect(() => {
-		async function checkPermission() {
-			const cameraPermission = await Camera.getCameraPermissionStatus();
-			if(cameraPermission !== 'authorized') {
-				await Camera.requestCameraPermission();
-			}
-		}
-
-		checkPermission();
-	}, []);
-
-	React.useEffect(() => {
-		async function getImages() {
-			try {
-				const directoryItems = await getImagesList();
-				let imagePaths = directoryItems.map((element) => {
-					return element.path;
-				});
-				setImageList(imagePaths);
-			} catch(e) {}
-		}
-
-		getImages();
-	}, []);
+	const { imageList, setImageList } = React.useContext(ImageListContext);
 
 	const devices = useCameraDevices();
 	const isFocused = useIsFocused();
