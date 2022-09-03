@@ -1,26 +1,43 @@
 import React from 'react';
 import { TouchableOpacity, StyleSheet, View } from 'react-native';
 import { Camera, TakePhotoOptions, TakeSnapshotOptions } from 'react-native-vision-camera';
+import { ImageListContext } from '../init';
 import { downloadImage } from '../lib/fs';
 
 interface ICaptureButton {
 	cameraRef: React.RefObject<Camera>;
 	enabled: boolean;
-	imageList: string[];
-	setImageList: any;
 }
 
 const photoOptions: TakePhotoOptions & TakeSnapshotOptions = {
 	enableAutoStabilization: true,
 }
 
-export const CaptureButton = ({cameraRef, enabled, imageList, setImageList}: ICaptureButton) => {
+export const CaptureButton = ({cameraRef, enabled}: ICaptureButton) => {
+	const {imageList, setImageList, replacedPath, setReplacedPath} = React.useContext(ImageListContext);
+
 	const onPhotoCapture = async () => {
 		if(cameraRef.current !== null) {
 			try {
+				let result;
 				const photo = await cameraRef.current.takePhoto(photoOptions);
-				const result = await downloadImage(photo.path);
-				setImageList((images: string[]) => [...images, result]);
+				if(replacedPath) {
+					// if replacedPath exists, replace the current photo location with new photo
+					result = await downloadImage(photo.path, replacedPath);
+					// to update imageList to show change in image component
+					const newList = imageList.map((elem) => {
+						if(elem === replacedPath) {
+							elem = elem + '?' + new Date();
+						}
+						return elem;
+					})
+					setImageList(newList);
+					setReplacedPath(null);
+				} else {
+					result = await downloadImage(photo.path);
+					let newImageList = [result, ...imageList];
+					setImageList(newImageList);
+				}
 			} catch (e) {}
 		}
 	}

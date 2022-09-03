@@ -1,18 +1,22 @@
 import React from 'react';
 import { Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { ImageListContext } from '../init';
 
 interface ILastImage {
-	imageList: string[];
 	navigateToGallery: () => void;
 }
 
-export const LastImage = ({imageList, navigateToGallery}: ILastImage) => {
-	const image = imageList[imageList.length - 1];
+export const LastImage = ({navigateToGallery}: ILastImage) => {
+	const {imageList} = React.useContext(ImageListContext);
 
 	return (
-		<TouchableOpacity onPress={navigateToGallery} style={styles.container}>
-			<Image style={styles.image} source={{uri: `file://${image}`}} />
-		</TouchableOpacity>
+		<>
+			{imageList.length > 0 && (
+				<TouchableOpacity onPress={navigateToGallery} style={styles.container}>
+					<Image style={styles.image} source={{uri: `file://${imageList[0]}`}} />
+				</TouchableOpacity>
+			)}
+		</>
 	)
 }
 

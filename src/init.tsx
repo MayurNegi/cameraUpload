@@ -7,14 +7,19 @@ import { getImagesList } from './lib/fs';
 
 export const ImageListContext = React.createContext<{
 	imageList: string[],
-	setImageList: (imageList: string[]) => void
+	setImageList: (imageList: string[]) => void,
+	replacedPath: string | null,
+	setReplacedPath: (path: string | null) => void
 }>({
 	imageList: [],
-	setImageList: () => {}
+	setImageList: () => {},
+	replacedPath: null,
+	setReplacedPath: () => {}
 });
 
 export const Init = () => {
 	const [imageList, setImageList] = React.useState<string[]>([]);
+	const [replacedPath, setReplacedPath] = React.useState<string | null>(null);
 
 	React.useEffect(() => {
 		createDefaultDir();
@@ -46,7 +51,7 @@ export const Init = () => {
 	}, []);
 
 	return (
-		<ImageListContext.Provider value={{ imageList, setImageList }}>
+		<ImageListContext.Provider value={{ imageList, setImageList, replacedPath, setReplacedPath }}>
 			<RootNavigator />
 		</ImageListContext.Provider>
 	);
