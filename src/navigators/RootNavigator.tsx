@@ -16,8 +16,8 @@ export const RootNavigator = () => {
   return (
     <NavigationContainer>
 		<Stack.Navigator screenOptions={{headerShown: false}}>
-			<Stack.Screen name="Camera" component={CameraScreen} />
 			<Stack.Screen name="Gallery" component={GalleryScreen} />
+			<Stack.Screen name="Camera" component={CameraScreen} />
 		</Stack.Navigator>
     </NavigationContainer>
   );
