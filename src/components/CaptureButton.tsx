@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity, StyleSheet, View } from 'react-native';
+import { TouchableOpacity, StyleSheet, View, Alert } from 'react-native';
 import { Camera, TakePhotoOptions, TakeSnapshotOptions } from 'react-native-vision-camera';
 import { ImageListContext } from '../init';
 import { downloadImage } from '../lib/fs';
@@ -31,6 +31,7 @@ export const CaptureButton = ({cameraRef, enabled}: ICaptureButton) => {
 						}
 						return elem;
 					})
+					Alert.alert('Image replaced');
 					setImageList(newList);
 					setReplacedPath(null);
 				} else {
