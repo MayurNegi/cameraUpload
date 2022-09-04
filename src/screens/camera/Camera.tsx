@@ -4,8 +4,7 @@ import { Camera, useCameraDevices } from 'react-native-vision-camera';
 import { useIsFocused } from '@react-navigation/native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-import { CaptureButton } from '../../components/CaptureButton';
-import { LastImage } from '../../components/LastImage';
+import { CaptureButton, BackButton, LastImage } from '../../components';
 import { RootList } from '../../navigators/RootNavigator';
 
 export type CameraProps = NativeStackScreenProps<RootList, 'Camera'>;
@@ -43,6 +42,8 @@ export const CameraScreen: React.FC<CameraProps> = ({navigation}: CameraProps) =
 				cameraRef={cameraRef}
 				enabled={isCameraInitialized}
 			/>
+
+			<BackButton navigateToGallery={navigateToGallery} />
 
 			<LastImage navigateToGallery={navigateToGallery} />
 		</View>
